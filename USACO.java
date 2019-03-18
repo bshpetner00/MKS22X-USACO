@@ -156,7 +156,7 @@ public class USACO {
 
 	public static void main(String[] args) throws FileNotFoundException{
 		try {  
-			System.out.println(""+bronze("field.dat"));
+			System.out.println(""+silver("field.dat"));
 		}
 		catch (FileNotFoundException e) {
 			System.out.println("File not found.");
