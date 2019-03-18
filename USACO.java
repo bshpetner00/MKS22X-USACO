@@ -82,12 +82,80 @@ public class USACO {
 		return 0;
 	}
 
-	public static void silver(String filename) {
-		 
+	public static int silver(String filename) throws FileNotFoundException{
+		try {
+			File text = new File(filename);
+			Scanner inf = new Scanner(text);
+			int Rows = Integer.parseInt(inf.next());
+			int Cols = Integer.parseInt(inf.next());
+			int Time = Integer.parseInt(inf.next());
+			char[][] data = new char[Rows][Cols];
+			String line;
+			for (int i = 0; i < data.length; i++){
+				line = inf.next();
+				for (int j = 0; j < data[i].length; j++){
+					data[i][j] = line.charAt(j);
+				}
+			}
+			int Fracas = 0;
+			int startingRow = Integer.parseInt(inf.next());
+			int startingCol = Integer.parseInt(inf.next());
+			int endingRow = Integer.parseInt(inf.next());
+			int endingCol = Integer.parseInt(inf.next());
+
+			int[][] choices = {
+				{1, 0},
+				{0, 1},
+				{-1, 0},
+				{0, -1},
+			};
+
+			int[][] paths = new int[Rows][Cols];
+			int[][] temp = new int[Rows][Cols];
+
+			for (int[] row : choices){
+				int newRow = startingRow + row[0];
+				int newCol = startingCol + row[1];
+				if (newRow >= 0 && newRow < Rows && newCol >= 0 && newCol < Cols &&  data[newRow][newCol] != '*'){
+					paths[newRow][newCol] = 1;
+					temp[newRow][newCol] = 1;
+				}
+			}
+
+			while (Time > 0) {
+				for (int r = 0; r < Rows; r++){
+					for (int c = 0; c < Cols; c++){
+						int sum = 0;
+						for (int[] row : choices){
+							int newRow = r + row[0];
+							int newCol = c + row[1];
+							if (newRow >= 0 && newRow < Rows && newCol >= 0 && newCol < Cols &&  data[newRow][newCol] != '*'){
+								sum = sum + paths[newRow][newCol];
+							}
+						}
+						if (data[r][c] != '*'){
+							temp[r][c] = sum;
+						}
+					}
+				}
+				for (int r = 0; r < Rows; r++){
+					for (int c = 0; c < Cols; c++){
+						paths[r][c] = temp[r][c];
+					}
+				}
+				Time--;
+			}
+
+			return paths[endingRow][endingCol];
+		}catch (FileNotFoundException e){
+			System.out.println("file not valid");
+			return -1;
+		}
+
 	}
 
 	public static void main(String[] args) throws FileNotFoundException{
-		try {
+		try {  
 			System.out.println(""+bronze("field.dat"));
 		}
 		catch (FileNotFoundException e) {
